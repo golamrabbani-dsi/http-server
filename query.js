@@ -6,4 +6,10 @@ const getBooks =  function(cb) {
     })
 }
 
-module.exports = {getBooks} 
+const getBook =  function(cb) {
+    conn.query("SELECT name FROM book",(err,results)=>{
+        cb(err,results)
+    })
+}
+
+module.exports = { getBooks, getBook } 
