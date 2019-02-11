@@ -1,7 +1,9 @@
 const http = require('http');
 const fs = require('fs');
-var url = require('url');
+const url = require('url');
 
+const conn = require('./connection');
+const route = require('./route')
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -9,17 +11,18 @@ const port = 3000;
 const server = http.createServer((req, res) => {
 
     var q = url.parse(req.url, true);
-    var filename = "." + q.pathname;
-    fs.readFile(filename, function(err, data) {
+    route(q.pathname,()=>{
+      conn.query("SELECT * FROM book",(err,results,fields)=>{
         if (err) {
           res.writeHead(404, {'Content-Type': 'text/html'});
           return res.end("404 Not Found");
         }  
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-      });
-    
+        console.log(results[0].name)
+        res.writeHead(200, {'Content-Type': 'text/json'});
+        res.write(JSON.stringify(results))
+        res.end()
+      })
+    })
   });
 
 server.listen(port, hostname, () => {
