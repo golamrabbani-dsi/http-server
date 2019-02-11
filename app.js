@@ -20,12 +20,29 @@ const app = (req,res)=> {
                     res.write(JSON.stringify(results))
                     res.end()
                 })
-
-                
-                
             }
         }
-    } else if(req.method === 'POST') {}
+    } else if(req.method === 'POST') {
+        switch(q.pathname) {
+        
+            case '/': {
+                res.writeHead(200, {'Content-Type': 'text/document'});
+                res.write("This is an API")
+                res.end()
+            }
+            break;
+            case '/books': {
+            
+                getBooks((error,results)=>{
+                    if(error)  res.end("something went wrong")
+                    res.writeHead(200, {'Content-Type': 'text/json'});
+                    res.write(JSON.stringify(results))
+                    res.end()
+                })
+  
+            }
+        }
+    }
 }
 
 
