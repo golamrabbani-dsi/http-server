@@ -1,15 +1,17 @@
-const conn = require('./connection');
+const conn = require("./connection");
 
-const getBooks =  function(cb) {
-    conn.query("SELECT * FROM book",(err,results)=>{
-        cb(err,results)
-    })
-}
+const getBooksQuery = function() {
+  return conn.select().table("books");
+};
 
-const getBook =  function(cb) {
-    conn.query("SELECT name FROM book",(err,results)=>{
-        cb(err,results)
-    })
-}
+const getBookQuery = function(id) {
+  return conn
+    .select()
+    .table("books")
+    .where({ idnew_table: id });
+};
 
-module.exports = { getBooks, getBook } 
+const addBookQuery = function(data) {
+  return conn.insert(data).table("books");
+};
+module.exports = { getBooksQuery, getBookQuery, addBookQuery };
