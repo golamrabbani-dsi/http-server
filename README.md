@@ -2,6 +2,11 @@
 
 ##Simple CRUD Operation via RESful API
 
+## How to open
+Clone the repository in your pc and 
+use command `npm install`
+then `npm start` or you can use `node index.js`
+
 ###API routes
 ```
 GET /
