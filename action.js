@@ -21,7 +21,7 @@ const getBook = (req, res, args) => {
     .then(results => res.json(200, results))
     .catch(err => {
       console.log(err);
-      res.json(404, []);
+      res.json(404, "book not found");
     });
 };
 // Add book to the database;
@@ -37,7 +37,7 @@ const addBook = function(req, res) {
         res.json(201, response);
       })
       .catch(e => {
-        res.end("Something went soooo bad");
+        res.json(404, "Something went soooo bad");
       });
   });
 };

@@ -27,9 +27,7 @@ const app = (req, res) => {
         switch (root) {
           case "":
             {
-              res.writeHead(200, { "Content-Type": "text/document" });
-              res.write("This is an API");
-              res.end();
+              res.json(200, "This is a very cool API");
             }
             break;
 
@@ -41,7 +39,7 @@ const app = (req, res) => {
             getBook(req, res, path[1]);
             break;
           default: {
-            res.end("Error 404 not found");
+            res.json(404, "Error 404 not found");
           }
         }
       }
@@ -49,32 +47,26 @@ const app = (req, res) => {
     case "POST":
       {
         switch (root) {
-          case "/":
-            {
-              res.writeHead(200, { "Content-Type": "text/document" });
-              res.write("This is an API");
-              res.end();
-            }
-            break;
-
           case "books":
             {
               addBook(req, res);
             }
             break;
           default: {
-            res.end("Error 404 not found");
+            res.json(404, "Error 404 not found");
           }
         }
       }
       break;
-    case "PATCH": {
-      switch (root) {
-        case `books/${path[1]}`: {
-          updateBook(req, res, path[1]);
+    case "PATCH":
+      {
+        switch (root) {
+          case `books/${path[1]}`: {
+            updateBook(req, res, path[1]);
+          }
         }
       }
-    }
+      break;
     case "DELETE":
       {
         switch (root) {
@@ -86,7 +78,7 @@ const app = (req, res) => {
 
       break;
     default: {
-      res.end("Error 404 not found");
+      res.json(404, "Error 404 not found");
     }
   }
 };
