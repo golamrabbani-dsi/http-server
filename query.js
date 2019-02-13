@@ -14,4 +14,24 @@ const getBookQuery = function(id) {
 const addBookQuery = function(data) {
   return conn.insert(data).table("books");
 };
-module.exports = { getBooksQuery, getBookQuery, addBookQuery };
+
+const updateBookQuery = (id, data) => {
+  return conn
+    .table("books")
+    .where({ idnew_table: id })
+    .update(data);
+};
+
+const deleteBookQuery = id => {
+  return conn
+    .table("books")
+    .where({ idnew_table: id })
+    .del();
+};
+module.exports = {
+  getBooksQuery,
+  getBookQuery,
+  addBookQuery,
+  updateBookQuery,
+  deleteBookQuery
+};

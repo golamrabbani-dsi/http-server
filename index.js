@@ -1,13 +1,12 @@
-const http = require('http');
-const fs = require('fs');
+const http = require("http");
+const fs = require("fs");
 
-
-const app = require('./app')
-const hostname = '127.0.0.1';
+const routes = require("./routes");
+const hostname = "127.0.0.1";
 const port = 3000;
 
-const server = http.createServer(app);
+const server = http.createServer(routes);
 
 server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-  });
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
