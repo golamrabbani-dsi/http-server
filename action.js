@@ -29,16 +29,20 @@ const addBook = function(req, res) {
   const chunks = [];
   req.on("data", chunk => chunks.push(chunk));
   req.on("end", () => {
-    const bufferedData = Buffer.concat(chunks);
-    const data = JSON.parse(bufferedData.toString());
+    if (chunks.length == 0) {
+      res.json(404, "Something went bad");
+    } else {
+      const bufferedData = Buffer.concat(chunks);
+      const data = JSON.parse(bufferedData.toString());
 
-    addBookQuery(data)
-      .then(response => {
-        res.json(201, response);
-      })
-      .catch(e => {
-        res.json(404, "Something went soooo bad");
-      });
+      addBookQuery(data)
+        .then(response => {
+          res.json(201, response);
+        })
+        .catch(e => {
+          res.json(404, "Something went soooo bad");
+        });
+    }
   });
 };
 

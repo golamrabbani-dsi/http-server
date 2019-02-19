@@ -11,14 +11,14 @@ const {
 const app = (req, res) => {
   // to json method middleware;
   res.json = (s, r) => {
-    res.writeHead(s, { "Content-Type": "text/json" });
+    res.writeHead(s, { "Content-Type": "application/json" });
     res.write(JSON.stringify(r));
     res.end();
   };
 
   const q = url.parse(req.url, true);
   const path = q.pathname.split("/").filter(e => e.length > 0);
-  console.log(q.query);
+
   const root = path.join("/");
 
   switch (req.method) {
@@ -53,7 +53,7 @@ const app = (req, res) => {
             }
             break;
           default: {
-            res.json(404, "Error 404 not found");
+            res.json(501, "Internal Server Error");
           }
         }
       }

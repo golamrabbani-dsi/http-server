@@ -10,3 +10,5 @@ const server = http.createServer(routes);
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+module.exports = server;
