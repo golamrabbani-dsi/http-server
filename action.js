@@ -18,7 +18,10 @@ const getBooks = (req, res) => {
 //Get single Book by id;
 const getBook = (req, res, args) => {
   getBookQuery(args)
-    .then(results => res.json(200, results))
+    .then(results => {
+      if (results.length > 0) res.json(200, results);
+      else res.json(404, "Error not found");
+    })
     .catch(err => {
       console.log(err);
       res.json(404, "book not found");
@@ -37,7 +40,7 @@ const addBook = function(req, res) {
 
       addBookQuery(data)
         .then(response => {
-          res.json(201, response);
+          res.json(201, response[0]);
         })
         .catch(e => {
           res.json(404, "Something went soooo bad");

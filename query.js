@@ -16,7 +16,6 @@ const addBookQuery = function(data) {
 };
 
 const updateBookQuery = (id, data) => {
-  console.log(id, data);
   return conn
     .table("books")
     .where({ idnew_table: id })
