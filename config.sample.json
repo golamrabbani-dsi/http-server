@@ -1,0 +1,9 @@
+{
+  "db": {
+    "name": "library",
+    "user": "root",
+    "pass": "password",
+    "host": "localhost"
+  },
+  "tableName": "books"
+}

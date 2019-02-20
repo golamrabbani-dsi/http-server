@@ -1,5 +1,5 @@
 const conn = require("./connection");
-const tableName = "books";
+const { tableName } = require("./config");
 
 const getBooksQuery = function() {
   return conn.select().table(tableName);
