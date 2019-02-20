@@ -8,13 +8,13 @@ var knex = require("knex")({
   }
 });
 
-knex.schema.hasTable("users").then(function(exists) {
+knex.schema.hasTable("books").then(function(exists) {
   if (!exists) {
-    return knex.schema.createTable("users", function(t) {
+    return knex.schema.createTable("books", function(t) {
       t.increments("id").primary();
-      t.string("first_name", 100);
-      t.string("last_name", 100);
-      t.text("bio");
+      t.string("title", 100).notNullable;
+      t.string("description", 100).notNullable;
+      t.text("link");
     });
   }
 });

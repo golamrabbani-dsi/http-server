@@ -12,8 +12,7 @@ const app = (req, res) => {
   // to json method middleware;
   res.json = (s, r) => {
     res.writeHead(s, { "Content-Type": "application/json" });
-    res.write(JSON.stringify(r));
-    res.end();
+    res.end(JSON.stringify(r));
   };
 
   const q = url.parse(req.url, true);
@@ -27,7 +26,7 @@ const app = (req, res) => {
         switch (root) {
           case "":
             {
-              res.json(200, "This is a very cool API");
+              res.json(200, { message: "This is a very cool API" });
             }
             break;
 
@@ -39,7 +38,7 @@ const app = (req, res) => {
             getBook(req, res, path[1]);
             break;
           default: {
-            res.json(404, "Error 404 not found");
+            res.json(404, { error: "Page Not Found" });
           }
         }
       }
@@ -61,8 +60,13 @@ const app = (req, res) => {
     case "PATCH":
       {
         switch (root) {
-          case `books/${path[1]}`: {
-            updateBook(req, res, path[1]);
+          case `books/${path[1]}`:
+            {
+              updateBook(req, res, path[1]);
+            }
+            break;
+          default: {
+            res.json(501, "Internal Server Error");
           }
         }
       }
@@ -70,15 +74,20 @@ const app = (req, res) => {
     case "DELETE":
       {
         switch (root) {
-          case `books/${path[1]}`: {
-            deleteBook(req, res, path[1]);
+          case `books/${path[1]}`:
+            {
+              deleteBook(req, res, path[1]);
+            }
+            break;
+          default: {
+            res.json(500, "Internal Server Error");
           }
         }
       }
 
       break;
     default: {
-      res.json(404, "Error 404 not found");
+      res.json(404, { error: "Error 404 not found" });
     }
   }
 };

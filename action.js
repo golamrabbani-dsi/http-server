@@ -12,7 +12,7 @@ const getBooks = (req, res) => {
     .then(result => {
       res.json(200, result);
     })
-    .catch(err => res.end("something went wrong"));
+    .catch(err => res.json(500, { error: "Internal Server Error" }));
 };
 
 //Get single Book by id;
@@ -20,31 +20,27 @@ const getBook = (req, res, args) => {
   getBookQuery(args)
     .then(results => {
       if (results.length > 0) res.json(200, results);
-      else res.json(404, "Error not found");
+      else res.json(404, "Specified Book is Not Found");
     })
-    .catch(err => {
-      console.log(err);
-      res.json(404, "book not found");
-    });
+    .catch(err => res.json(500, { error: "Internal Server Error" }));
 };
+
 // Add book to the database;
 const addBook = function(req, res) {
   const chunks = [];
   req.on("data", chunk => chunks.push(chunk));
   req.on("end", () => {
     if (chunks.length == 0) {
-      res.json(404, "Something went bad");
+      res.json(406, { error: "Empty Body Not Acceptable" });
     } else {
       const bufferedData = Buffer.concat(chunks);
       const data = JSON.parse(bufferedData.toString());
 
       addBookQuery(data)
         .then(response => {
-          res.json(201, response[0]);
+          res.json(201, { data: response[0] });
         })
-        .catch(e => {
-          res.json(404, "Something went soooo bad");
-        });
+        .catch(err => res.json(500, { error: "Internal Server Error" }));
     }
   });
 };
@@ -59,11 +55,10 @@ const updateBook = (req, res, id) => {
 
     updateBookQuery(id, data)
       .then(response => {
-        res.json(203, response);
+        if (response) res.json(201, { message: "Successfully Deleted" });
+        else res.json(404, { error: "Nothing found to be updated" });
       })
-      .catch(e => {
-        res.json(404, e);
-      });
+      .catch(err => res.json(500, { error: "Internal Server Error" }));
   });
 };
 
@@ -71,10 +66,9 @@ const updateBook = (req, res, id) => {
 const deleteBook = (req, res, id) => {
   deleteBookQuery(id)
     .then(response => {
-      res.json(200, response);
+      if (response) res.json(201, { message: "Successfully Deleted" });
+      else res.json(404, { error: "Nothing found to be deleted" });
     })
-    .catch(e => {
-      res.json(404, e);
-    });
+    .catch(err => res.json(500, { error: "Internal Server Error" }));
 };
 module.exports = { addBook, getBook, getBooks, updateBook, deleteBook };

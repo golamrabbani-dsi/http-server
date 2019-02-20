@@ -1,9 +1,9 @@
 const request = require("supertest");
-const server = require("./index");
-const hostname = "127.0.0.1";
-const port = 3000;
+const http = require("http");
+const server = http.createServer(require("../routes"));
 
-beforeEach(done => {
+beforeEach(async done => {
+  await require("../connection")("books").delete();
   request(server)
     .post("/books/")
     .send({
@@ -27,11 +27,11 @@ describe("GET /", () => {
       });
   });
 
-  it("should return a sentence", done => {
+  it("should return a message", done => {
     request(server)
       .get("/")
-      .expect(`"This is a very cool API"`)
       .end(function(err, res) {
+        expect(res.body).toHaveProperty("message");
         if (err) return done(err);
         done();
       });
@@ -113,7 +113,20 @@ describe("POST /books/", () => {
       .end(function(err, res) {
         if (err) return done(err);
 
-        expect(res.body).toBeGreaterThan(0);
+        expect(res.body).toHaveProperty("data");
+        done();
+      });
+  });
+
+  it("should return Error if empty body sent to to add book", done => {
+    request(server)
+      .post("/books/")
+      .send()
+      .set("Accept", "application/json")
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.body).toHaveProperty("error");
         done();
       });
   });
@@ -129,8 +142,21 @@ describe("PATCH /books/[id]", () => {
       .set("Accept", "application/json")
       .end(function(err, res) {
         if (err) return done(err);
-        console.log(res.body);
-        expect(res.body).toBe(1);
+        expect(res.body).toHaveProperty("message");
+        done();
+      });
+  });
+
+  it("should return failer message of update request", done => {
+    request(server)
+      .patch("/books/dsf")
+      .send({
+        link: "test.com"
+      })
+      .set("Accept", "application/json")
+      .end(function(err, res) {
+        if (err) return done(err);
+        expect(res.body).toHaveProperty("error");
         done();
       });
   });
@@ -142,8 +168,7 @@ describe("DELETE /books/[id]", () => {
       .delete("/books/25")
       .end(function(err, res) {
         if (err) return done(err);
-        console.log(res.body);
-        expect(res.body).toBe(1);
+        expect(res.body).toHaveProperty("message");
         done();
       });
   });
